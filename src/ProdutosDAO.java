@@ -78,6 +78,34 @@ public class ProdutosDAO {
         
         return listagem;
     }
+    
+    public ArrayList<ProdutosDTO> listarProdutosVendidos(){
+        
+        String sql = "SELECT * FROM produtos WHERE status = 'Vendido' ";
+        
+        try {
+            PreparedStatement ps = this.conn.prepareStatement(sql);
+            ResultSet rs = ps.executeQuery();
+            
+            while(rs.next()){
+                
+                ProdutosDTO p = new ProdutosDTO();
+                p.setId(rs.getInt("id"));
+                p.setNome(rs.getString("nome"));
+                p.setValor(rs.getInt("valor"));
+                p.setStatus(rs.getString("status"));
+                listagem.add(p);
+            }
+            ps.close();;
+            rs.close();
+        } catch (SQLException ex) {
+            Logger.getLogger(ProdutosDAO.class.getName()).log(Level.SEVERE, null, ex);
+        }finally{
+            new conectaDAO().desconectDB(conn);
+        }
+        
+        return listagem;
+    }
 
     public boolean venderProduto(String id) {
 
@@ -95,6 +123,8 @@ public class ProdutosDAO {
         } catch (SQLException ex) {
             Logger.getLogger(ProdutosDAO.class.getName()).log(Level.SEVERE, null, ex);
             return false;
+        }finally{
+            new conectaDAO().desconectDB(conn);
         }
 
   
