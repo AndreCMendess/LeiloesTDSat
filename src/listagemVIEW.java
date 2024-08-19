@@ -1,5 +1,7 @@
 
 import java.util.ArrayList;
+import javax.swing.JOptionPane;
+import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
 
 /*
@@ -19,6 +21,8 @@ public class listagemVIEW extends javax.swing.JFrame {
     public listagemVIEW() {
         initComponents();
         listarProdutos();
+      
+       
     }
 
     /**
@@ -54,6 +58,11 @@ public class listagemVIEW extends javax.swing.JFrame {
                 "ID", "Nome", "Valor", "Status"
             }
         ));
+        listaProdutos.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                listaProdutosMouseClicked(evt);
+            }
+        });
         jScrollPane1.setViewportView(listaProdutos);
 
         jLabel1.setFont(new java.awt.Font("Lucida Fax", 0, 18)); // NOI18N
@@ -138,9 +147,14 @@ public class listagemVIEW extends javax.swing.JFrame {
     private void btnVenderActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnVenderActionPerformed
         String id = id_produto_venda.getText();
         
-        ProdutosDAO produtosdao = new ProdutosDAO();
         
-        //produtosdao.venderProduto(Integer.parseInt(id));
+        if(new ProdutosDAO().venderProduto(id)){
+            JOptionPane.showMessageDialog(rootPane, "Produto vendido com sucesso");
+        }else{
+            JOptionPane.showMessageDialog(rootPane, "Não foi possivel vender ese produto");
+        }
+        
+     
         listarProdutos();
     }//GEN-LAST:event_btnVenderActionPerformed
 
@@ -152,6 +166,10 @@ public class listagemVIEW extends javax.swing.JFrame {
     private void btnVoltarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnVoltarActionPerformed
         this.dispose();
     }//GEN-LAST:event_btnVoltarActionPerformed
+
+    private void listaProdutosMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_listaProdutosMouseClicked
+          obterProduto();
+    }//GEN-LAST:event_listaProdutosMouseClicked
 
     /**
      * @param args the command line arguments
@@ -224,5 +242,25 @@ public class listagemVIEW extends javax.swing.JFrame {
             e.printStackTrace();
         }
     
+    }
+    
+    public int obterProduto(){
+        
+        int linha = listaProdutos.getSelectedRow();
+        
+        if ( linha != -1){
+            
+            int id = Integer.parseInt(listaProdutos.getValueAt(linha, 0).toString());
+             id_produto_venda.setText(String.valueOf(id));
+            return id;
+        }else{
+            JOptionPane.showMessageDialog(rootPane, "Selecione um produto");
+            return -1;
+        }
+        
+       
+       
+      
+          
     }
 }

@@ -1,12 +1,3 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
-
-/**
- *
- * @author Adm
- */
 
 import java.sql.PreparedStatement;
 import java.sql.Connection;
@@ -14,6 +5,9 @@ import javax.swing.JOptionPane;
 import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 
 public class ProdutosDAO {
@@ -84,9 +78,28 @@ public class ProdutosDAO {
         
         return listagem;
     }
-    
-    
-    
+
+    public boolean venderProduto(String id) {
+
+        String sql = "UPDATE Produtos SET status = ? WHERE id = ?";
+
+        try {
+            PreparedStatement ps = this.conn.prepareStatement(sql);
+
+            ps.setString(1, "Vendido");
+            ps.setInt(2, Integer.parseInt(id));
+            ps.executeUpdate();
+            ps.close();
+            return true;
+            
+        } catch (SQLException ex) {
+            Logger.getLogger(ProdutosDAO.class.getName()).log(Level.SEVERE, null, ex);
+            return false;
+        }
+
+  
         
+    }
+
 }
 
